@@ -1,6 +1,6 @@
 import os
 from config import *
-from map_httpd import HttpdConfig
+import Httpd
 from icecream import ic
 import logging
 import config
@@ -17,10 +17,12 @@ def main():
     domains = input("Enter the domains separated by comma: ")
 
     logging.basicConfig(level=config.loglevel)
-    running_config = HttpdConfig()
 
-    running_config.add_vhost(vhost, domains.strip().split(","))
-    print(running_config.write_config())
+    ols = Httpd.Config()
+    ols.add_vhost(vhost, domains.strip().split(","))
+    print(ols.get())
+    ols.save_config(vhost)
+
 
 ######################################################
 main()
