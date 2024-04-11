@@ -1,4 +1,5 @@
 from .Parser import Parser
+from .VHost import VHost
 import os
 import config
 
@@ -6,7 +7,7 @@ class Config:
     def __init__(self):
         self.config = Parser(config.httpd_conf_path)
 
-    def get(self):
+    def generate(self):
         local_config = self.config.httpd_config.copy()
         specials = {
             "accessDenyDir": local_config.pop("accessDenyDir"),
@@ -58,29 +59,18 @@ class Config:
         CONFIG += "}\n"
         return CONFIG
 
-    def add_vhost(self, vhost_name: str, domains: str):
-        self.config.httpd_config["listener HTTP"]["maps"].append({
-            "vhost": vhost_name,
-            "domains": [x.strip() for x in domains],
-            })
-        self.config.httpd_config["vhosts"].append({vhost_name: {
-            "vhRoot": [f"$SERVER_ROOT/conf/vhosts/{vhost_name}"],
-            "configFile": ['$SERVER_ROOT/conf/vhosts/$VH_NAME/vhconf.conf'],
-            "allowSymbolLink": [1],
-            "enableScript": [1],
-            "restrained": [1],
-        }})
+    def add_vhost(self, vhost_name, domains):
+        vhost = VHost(vhost_name, domains)
+        self.config.httpd_config["listener HTTP"]["maps"].append(vhost.generate_map())
+        self.config.httpd_config["vhosts"].append(vhost.generate_vhost())
 
     def __str__(self) -> str:
         return str(self.config)
 
     def __make_dirs(self, vhost_name: str):
-        vhost_dir = os.path.join(config.vhost_dir, vhost_name)
-        if not os.path.exists(vhost_dir):
-            os.makedirs(vhost_dir)
-        return vhost_dir
+        pass
 
     def save_config(self, vhost_name: str):
-        with open(self.config.src_path, "w") as f:
-            f.write(self.get())
+        with open(self.config.path, "w") as f:
+            f.write(self.generate())
         self.__make_dirs(vhost_name)

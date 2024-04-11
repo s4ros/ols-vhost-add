@@ -4,7 +4,7 @@ from logging import getLogger
 
 class Parser:
     def __init__(self, src_path):
-        self.src_path = src_path
+        self.path = src_path
         self.raw_config = self.load_config()
         self.httpd_config = {
             "vhosts": [],
@@ -23,7 +23,7 @@ class Parser:
         ic(self.httpd_config)
 
     def load_config(self):
-        with open(self.src_path, "r") as f:
+        with open(self.path, "r") as f:
             return f.read()
 
     def __str__(self) -> str:

@@ -6,6 +6,7 @@ import logging
 import config
 
 ic.configureOutput(includeContext=True)
+ic.disable()
 
 
 def main():
@@ -20,7 +21,7 @@ def main():
 
     ols = Httpd.Config()
     ols.add_vhost(vhost, domains.strip().split(","))
-    print(ols.get())
+    print(ols.generate())
     ols.save_config(vhost)
 
 
