@@ -6,7 +6,7 @@
   - [x] Add new vhost to the `vhost` file
   - [x] Add new vhost to the `vhconf` file
 - [ ] Add new Lables to the docker-compose file (traefik configuration)
-  - `traefik.http.routers.litespeed.rule=Host(`new.vhost.com`)`
+  - `traefik.http.routers.litespeed.rule=Host(``new.vhost.com``)`
 - [ ] Restart OpenLiteSpeed docker container
   - `docker compose up -d --force-recreate litespeed`
 
