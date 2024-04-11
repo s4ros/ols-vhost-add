@@ -60,17 +60,21 @@ class Config:
         return CONFIG
 
     def add_vhost(self, vhost_name, domains):
-        vhost = VHost(vhost_name, domains)
-        self.config.httpd_config["listener HTTP"]["maps"].append(vhost.generate_map())
-        self.config.httpd_config["vhosts"].append(vhost.generate_vhost())
+        domains = domains.strip().split(",")
+        self.vhost = VHost(vhost_name, domains)
+        self.config.httpd_config["listener HTTP"]["maps"].append(self.vhost.generate_map())
+        self.config.httpd_config["vhosts"].append(self.vhost.generate_vhost())
+
+    def __set_permissions(self):
+        os.system(f"chown -R {config.lsadm_uid}:{config.lsadm_gid} {config.services_dir}")
+        os.system(f"chown -R {config.lsadm_uid}:{config.lsadm_gid} {config.vhost_dir}")
+        os.system(f"chown -R {config.lsadm_uid}:{config.lsadm_gid} {config.vhost_conf_dir}")
 
     def __str__(self) -> str:
         return str(self.config)
 
-    def __make_dirs(self, vhost_name: str):
-        pass
-
-    def save_config(self, vhost_name: str):
+    def save_config(self):
         with open(self.config.path, "w") as f:
             f.write(self.generate())
-        self.__make_dirs(vhost_name)
+        self.vhost.save_config()
+        self.__set_permissions()
