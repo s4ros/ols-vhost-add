@@ -5,7 +5,13 @@ import config
 
 class Config:
     def __init__(self):
+        self.__create_backup()
         self.config = Parser(config.httpd_conf_path)
+
+    def __create_backup(self):
+        with open(config.httpd_conf_path, "r") as f:
+            with open(f"{config.httpd_conf_path}.bak", "w") as b:
+                b.write(f.read())
 
     def generate(self):
         local_config = self.config.httpd_config.copy()
