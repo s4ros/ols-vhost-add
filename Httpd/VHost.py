@@ -41,7 +41,7 @@ class VHost:
 
     def save_config(self):
         self.__prepare_dirs()
-        CONFIG = f"docRoot\t\t{config.services_dir}/{self.vhost_name}\n"
+        CONFIG = f"docRoot\t\t/var/www/services/{self.vhost_name}\n"
         CONFIG += "scripthandler  {\n"
         CONFIG += "    add\t\tlsapi:lsphp82 php\n"
         CONFIG += "}\n"
