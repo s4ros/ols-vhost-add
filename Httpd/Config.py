@@ -2,6 +2,8 @@ from .Parser import Parser
 from .VHost import VHost
 import os
 import config
+import subprocess
+import logging
 
 class Config:
     def __init__(self):
@@ -72,9 +74,9 @@ class Config:
         self.config.httpd_config["vhosts"].append(self.vhost.generate_vhost())
 
     def __set_permissions(self):
-        os.system(f"chown -R {config.lsadm_uid}:{config.lsadm_gid} {config.services_dir}")
-        os.system(f"chown -R {config.lsadm_uid}:{config.lsadm_gid} {config.vhost_dir}")
-        os.system(f"chown -R {config.lsadm_uid}:{config.lsadm_gid} {config.vhost_conf_dir}")
+        os.system(f"sudo chown -R {config.lsadm_uid}:{config.lsadm_gid} {config.services_dir}")
+        os.system(f"sudo chown -R {config.lsadm_uid}:{config.lsadm_gid} {config.vhost_dir}")
+        os.system(f"sudo chown -R {config.lsadm_uid}:{config.lsadm_gid} {config.vhost_conf_dir}")
 
     def __str__(self) -> str:
         return str(self.config)
@@ -84,3 +86,10 @@ class Config:
             f.write(self.generate())
         self.vhost.save_config()
         self.__set_permissions()
+
+    def restart(self):
+        # os.system(f"docker exec litespeed /usr/local/lsws/bin/lswsctrl restart")
+        r = subprocess.run(["docker", "exec", "litespeed", "/usr/local/lsws/bin/lswsctrl", "restart"],
+                    capture_output=True,)
+        if r.returncode != 0:
+            logging.error(r.stderr)

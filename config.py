@@ -16,7 +16,9 @@ vhost_dir = "./test/vhost_dir"
 import logging
 loglevel = logging.ERROR
 
+##
+## OpenLiteSpeed Config
+##
 lsadm_uid = 999
 lsadm_gid = 1000
-
 lsws_bin_dir = "/usr/local/lsws/bin"
