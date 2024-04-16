@@ -38,7 +38,7 @@ def main():
     print("Vhost added successfully.")
     print("Please remember to add domain to traefik labels in docker compose")
     print("vim /home/ubuntu/common/litespeed/docker-compose.yml")
-    print("cd /home/ubuntu/common/litespeed && docker-compose up -d")
+    print("cd /home/ubuntu/common/litespeed && docker compose up -d")
 
 
 ######################################################
