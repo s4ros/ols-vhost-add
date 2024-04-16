@@ -11,7 +11,7 @@ ic.disable()
 def check_write_permissions():
     LOCATIONS = [
         config.httpd_conf_path,
-        config.services_dir,
+        # config.services_dir,
         config.vhost_dir,
         config.vhost_conf_dir
     ]
